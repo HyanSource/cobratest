@@ -17,6 +17,7 @@ package cmd
 
 import (
 	"fmt"
+	"strconv"
 
 	"github.com/spf13/cobra"
 )
@@ -24,18 +25,30 @@ import (
 // paCmd represents the pa command
 var paCmd = &cobra.Command{
 	Use:   "pa",
-	Short: "",
-	Long:  ``,
+	Short: "把所有輸入的數字加總起來",
+	Long:  `把所有輸入的數字加總起來 比如123 456 789 就會是1368`,
 	Run: func(cmd *cobra.Command, args []string) {
 
-		fmt.Println("pa called", pp)
+		c := 0.0
+
+		for _, v := range args {
+			t, err := strconv.Atoi(v)
+			if err != nil {
+				panic("number error")
+			}
+			c += float64(t)
+		}
+		c -= m
+		fmt.Println("pa called ", c)
 	},
 }
 
-var pp string
+var (
+	m float64
+)
 
 func init() {
 	rootCmd.AddCommand(paCmd)
 
-	paCmd.Flags().StringVarP(&pp, "player", "p", "", "輸入名字")
+	paCmd.Flags().Float64VarP(&m, "minus", "m", 0, "需要減去的數字")
 }
